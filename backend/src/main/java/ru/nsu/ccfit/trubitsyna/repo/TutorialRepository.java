@@ -6,8 +6,8 @@ import org.springframework.stereotype.Repository;
 
 import ru.nsu.ccfit.trubitsyna.model.*;
 
-@Repository
-public interface TutorialRepository extends JpaRepository<Tutorial, Long> {
-  List<Tutorial> findByPublished(boolean published);
-  List<Tutorial> findByTitleContaining(String title);
-}
+// @Repository
+// public interface TutorialRepository extends JpaRepository<Song, Long> {
+//   List<Song> findByPublished(boolean published);
+//   List<Song> findByTitleContaining(String title);
+// }
