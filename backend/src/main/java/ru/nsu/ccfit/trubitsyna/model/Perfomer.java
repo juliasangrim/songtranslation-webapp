@@ -1,9 +1,9 @@
 package ru.nsu.ccfit.trubitsyna.model;
 
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,10 +17,15 @@ public class Perfomer {
     private long id;
 
     @Column(name = "performer_name")
+    @NotBlank
     @Getter @Setter
-    private String name;
+    private String perfomerName;
 
-    @ManyToMany
-    @Getter
-    private Set<Song> songs;
+    // @ManyToMany(mappedBy = "perfomers")
+    // @Getter
+    // private Set<Song> songs;
+
+    public Perfomer(String name) {
+        this.perfomerName = name;
+    }
 }

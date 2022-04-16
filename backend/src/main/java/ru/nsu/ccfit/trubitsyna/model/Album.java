@@ -1,9 +1,8 @@
 package ru.nsu.ccfit.trubitsyna.model;
 
-import java.util.List;
-import java.util.Set;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,14 +13,20 @@ import lombok.Setter;
 public class Album {
     @Id
     @Getter
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
     @Column(name = "album_name")
+    @NotBlank
     @Getter @Setter
     private String albumName;
 
-    @OneToMany(mappedBy = "album")
-    @Getter
-    private Set<Song> songs;
-    
+    public Album() {
+
+    }
+
+
+    public Album(String name) {
+        this.albumName = name;
+    }
 }

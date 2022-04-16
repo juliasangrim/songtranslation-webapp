@@ -1,6 +1,8 @@
 package ru.nsu.ccfit.trubitsyna.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,19 +25,29 @@ public class Translation {
     @Getter
     private User user;
 
-    @ManyToOne 
+    @ManyToOne
     @JoinColumn(name = "language_id")
     @Getter
     private Language language;
 
-    @Lob
-    @Column(name = "text")
+
+    @Column(name = "text", columnDefinition = "TEXT")
+    @NotBlank
     @Getter @Setter
     private String text;
 
     @Column(name = "like_count")
+    @NotNull
     @Getter @Setter
     private long likeCount;
+
+    public Translation(Song song, User user, Language language, String text, long likeCount) {
+        this.song = song;
+        this.user = user; 
+        this.language = language;
+        this.text = text;
+        this.likeCount = likeCount;
+    }
 
 
 }
