@@ -8,14 +8,16 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
+@NoArgsConstructor
 @Table(name = "users")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter
     private long id;
 
@@ -33,11 +35,16 @@ public class User {
     @NotBlank
     @Getter @Setter
     private String password;
-    
-    @Column(name = "like_count")
+
+    @Column(name = "email")
+    @NotBlank
     @Getter @Setter
-    @NotNull
-    private long likeCount; 
+    private String email;
+    
+    // @Column(name = "like_count")
+    // @Getter @Setter
+    // @NotNull
+    // private long likeCount; 
     @OneToMany(mappedBy = "user")
     @Getter
     private Set<Translation> translations;

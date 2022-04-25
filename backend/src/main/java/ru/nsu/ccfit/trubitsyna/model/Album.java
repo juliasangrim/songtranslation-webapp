@@ -4,26 +4,27 @@ package ru.nsu.ccfit.trubitsyna.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
+@NoArgsConstructor
 @Table(name = "albums")
 public class Album {
     @Id
-    @Getter
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Getter 
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name = "album_name")
+    @Column(name = "album_name")    
     @NotBlank
     @Getter @Setter
     private String albumName;
 
-    public Album() {
-
-    }
 
 
     public Album(String name) {

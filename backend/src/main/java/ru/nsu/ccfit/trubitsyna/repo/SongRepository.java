@@ -9,5 +9,5 @@ import ru.nsu.ccfit.trubitsyna.model.*;
 @Repository
 public interface SongRepository extends JpaRepository<Song, Long> {
   Set<Song> findBySongName(String songName);
-
+  Song findByAlbumId(long albumId);
 }

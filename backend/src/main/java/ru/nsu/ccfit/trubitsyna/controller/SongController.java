@@ -2,23 +2,17 @@ package ru.nsu.ccfit.trubitsyna.controller;
 
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.nsu.ccfit.trubitsyna.model.*;
 import ru.nsu.ccfit.trubitsyna.repo.*;
 
-// @CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "http://localhost:8000")
 @RestController
 @RequestMapping("/api")
 public class SongController {
@@ -29,29 +23,59 @@ public class SongController {
 	LanguageRepository languageRepository;
 	@Autowired
 	AlbumRepository albumRepository;
+	@Autowired
+	PerformerRepository performerRepository;
 
-	@PostMapping("/songs")
-	public ResponseEntity<Song> createSong(@RequestParam String album_name, 
-	@RequestParam String language_name,
+	@GetMapping("/search")
+	public ResponseEntity<Set<Song>> getSongByName(@RequestParam(name = "song_name") String songName) {
+		Set<Song> songs = new HashSet<>();
+		songRepository.findBySongName(songName).forEach(songs::add);
+        if (songs.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(songs, HttpStatus.OK);
+	}
+
+
+	// @GetMapping("/song")
+	// public ResponseEntity<Song> getOneSong(@RequestParam(name = "song_name") String songName, 
+	// 	@RequestParam(name = "album_name") String albumName, 
+	// 	@RequestParam(name = "performer_name") Set<String> performerName ) {
+	// 	Set<Song> songs = songRepository.findBySongName(songName);
+	// 	for (var song : songs) {
+	// 		if (song.getAlbum().getAlbumName() == albumName) {
+	// 			var performers = song.getPerformers();
+	// 			for (var performer : performers) {
+	// 				if ()
+	// 			}
+	// 		}
+	// 	}
+	// }
+
+	@PostMapping("/add_songs")
+	public ResponseEntity<Song> addSong(@RequestParam(name = "album_id") long albumId, 
+		@RequestParam(name = "language_id") long languageId,
+	 	@RequestParam(name = "performer_id") long performerId,
 		@RequestBody Song songRequest) {
-		System.out.println(album_name);
-		System.out.println(language_name);
-		Album album = albumRepository.findByAlbumName(album_name);
-		if (album == null) {
-			albumRepository.save(new Album(album_name));
-		} else {
-			songRequest.setAlbum(album);
-		}
-		Language language = languageRepository.findByShortName(language_name);
-		if (language == null) {
-			languageRepository.sve(new Language(name, shortName))
-		}
-		// songRequest.setAlbum(album);
-
-		// Language language = languageRepository.findById(language_id).orElseThrow(IllegalAccessError::new);
-		// songRequest.setLanguage(language);
-		// songRepository.save(songRequest);
-		return new ResponseEntity<>(songRequest, HttpStatus.CREATED);
+			
+	
+			Song song = performerRepository.findById(performerId).map(performer -> {
+				long songId = songRequest.getId();
+				if (songId != 0L) {
+					Song _song = songRepository.findById(songId)
+						.orElseThrow(() -> new IllegalAccessError("Not found Tag with id = " + songId));
+					performer.addSong(_song);
+					performerRepository.save(performer);
+					return _song;
+				  }
+				Album album = albumRepository.findById(albumId).orElseThrow(() -> new IllegalAccessError("There is no album with id " + albumId));
+				songRequest.setAlbum(album);
+				Language language = languageRepository.findById(languageId).orElseThrow(() -> new IllegalAccessError("There is no language with id " + languageId));
+				songRequest.setLanguage(language);
+			 	performer.addSong(songRequest);
+				return songRepository.save(songRequest);
+		  	}).orElseThrow(() -> new IllegalAccessError("There is no performer with id " + performerId));
+		return new ResponseEntity<>(song, HttpStatus.CREATED);
 	}
 
 // 	@PutMapping("/comments/{id}")

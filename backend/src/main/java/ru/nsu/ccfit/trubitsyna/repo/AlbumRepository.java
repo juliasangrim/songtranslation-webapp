@@ -9,5 +9,5 @@ import ru.nsu.ccfit.trubitsyna.model.Album;
 
 @Repository
 public interface AlbumRepository extends JpaRepository<Album, Long> {
-    Album findByAlbumName(String albumName);
+    Set<Album> findByAlbumName(String albumName);
 }

@@ -17,7 +17,7 @@ public class LanguageController {
     @Autowired
     LanguageRepository languageRepository;
 
-    @GetMapping("/languages")
+    @GetMapping("/get_all_languages")
     public ResponseEntity<Set<Language>> getAllLanguages() {
         Set<Language> languages = new HashSet<Language>();
         languageRepository.findAll().forEach(languages::add);
@@ -29,36 +29,36 @@ public class LanguageController {
     }
 
 
-    @GetMapping("/languages")
-    public ResponseEntity<Language> getLanguageByName(@RequestBody String name) {
-        Language language = languageRepository.findByShortName(name);
+    @GetMapping("/get_language_by_name")
+    public ResponseEntity<Language> getLanguageByName(@RequestParam(name = "language_name") String name) {
+        Language language = languageRepository.findByLanguageName(name);
         if (language == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(language, HttpStatus.OK);
     }
 
-    @GetMapping("/languages")
-    public ResponseEntity<Language> getLanguageById(@RequestBody long id) {
+    @GetMapping("/get_language_by_id")
+    public ResponseEntity<Language> getLanguageById(@RequestParam(name = "language_id") long id) {
         Language language = languageRepository.findById(id)
         .orElseThrow(IllegalAccessError::new);
         return new ResponseEntity<>(language, HttpStatus.OK);
     }
 
-    @PostMapping("/languages")
+    @PostMapping("/add_languages")
     public ResponseEntity<Language> createLanguage(@RequestBody Language language) {
-        Language _language = languageRepository.save(new Language(language.getLanguageName(), language.getShortName()));
+        Language _language = languageRepository.save(new Language(language.getLanguageName()));
         return new ResponseEntity<>(_language, HttpStatus.CREATED);
     
     }
 
-    @DeleteMapping("/languages")
-    public ResponseEntity<HttpStatus> deleteAlbum(@RequestBody long id) {
+    @DeleteMapping("/delete_language_by_id")
+    public ResponseEntity<HttpStatus> deleteAlbum(@RequestParam(name = "id") long id) {
         languageRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping("/languages")
+    @DeleteMapping("/delete_all_languages")
     public ResponseEntity<HttpStatus> deleteAllAlbums() {
         languageRepository.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

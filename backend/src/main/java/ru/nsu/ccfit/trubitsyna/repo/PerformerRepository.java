@@ -5,9 +5,9 @@ import java.util.Set;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import ru.nsu.ccfit.trubitsyna.model.Language;
+import ru.nsu.ccfit.trubitsyna.model.Performer;
 
 @Repository
-public interface LanguageRepository extends JpaRepository<Language, Long> {
-    Language findByLanguageName(String languageName);       
+public interface PerformerRepository extends JpaRepository<Performer, Long> {
+    Performer findByPerformerName(String performerName);
 }
