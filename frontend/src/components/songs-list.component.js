@@ -7,7 +7,7 @@ const SongsList = () => {
   const [songs, setSongs] = useState([]);
   const [performers, setPerformes] = useState([]);
   const [album, setAlbum] = useState(null);
-  const [currrentSong, setCurrentSong] = useState(null);
+  const [currentSong, setCurrentSong] = useState(null);
   const [searchName, setSearchName] = useState("");
 
  
@@ -28,6 +28,8 @@ const SongsList = () => {
     SongService.findSongByName(searchName)
       .then(response => {
         setSongs(response.data);
+        setCurrentIndex(-1);
+        setCurrentSong("");
         console.log(response.data);
       })
       .catch(e => {
@@ -59,7 +61,7 @@ const SongsList = () => {
           <div className="col-md-6">
             <h4>Result of searching</h4>
             <ul className="list-group">
-              { songs && 
+              { songs ? ( 
                 songs.map((song, index) => (
                   <li
                     className={
@@ -69,15 +71,57 @@ const SongsList = () => {
                     key={index}
                     >
                       <p>{song.songName}</p>
-                      <small>{album.albumName}</small>
-                        {/* {
-                        performers.map((performer) => (
-                          <small>{performer.performerName}</small>
+                      <p>{
+                        song.performers.map((performer) => (
+                          <small>{performer.performerName} </small>
                         ))
-                      } */}
+                      }</p>
+                      <small>{song.album.albumName}</small>
                   </li>
-                ))}
+                ))
+              ) : (
+                <div>
+                  <li>
+                    No result!
+                  </li>
+                </div>
+              )}
             </ul>
+          </div>
+          <div className="col-md-6">
+            {currentSong && (
+              <div>
+                <h4>Song</h4>
+                <div>
+                  <label>
+                    <strong>Song name:</strong>
+                  </label>{" "}
+                  {currentSong.songName}
+                </div>
+                <div>
+                  <label>
+                      <strong>Album:</strong>
+                  </label>{" "}
+                  {currentSong.album.albumName}
+               </div>
+                <div>
+                  <label>
+                    <strong>Perfomers:</strong>                    
+                  </label>{" "}
+                  { currentSong.performers.map((performer) => (
+                      <small>{performer.performerName} </small>
+                    ))
+                  }
+                </div>
+                <div>
+                  <label>
+                      <strong>Text:</strong>
+                  </label>{" "}
+                  {currentSong.text}
+               </div>
+              </div>
+            )
+          }
           </div>
         </div>
   );

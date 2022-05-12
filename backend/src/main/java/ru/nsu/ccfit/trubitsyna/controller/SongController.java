@@ -29,6 +29,7 @@ public class SongController {
 	@GetMapping("/search")
 	public ResponseEntity<Set<Song>> getSongByName(@RequestParam(name = "song_name") String songName) {
 		Set<Song> songs = new HashSet<>();
+		System.out.println("hi");
 		songRepository.findBySongName(songName).forEach(songs::add);
         if (songs.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
