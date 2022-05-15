@@ -16,7 +16,7 @@ public class Translation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter
     private long id;
-
+    
     @ManyToOne
     @JoinColumn(name = "song_id")
     @Getter
